@@ -23,15 +23,15 @@
  *  http://www.gnu.org/copyleft/lgpl.html
  */
 
+#include <assert.h>
+#include <limits.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
-#include <assert.h>
 #include <time.h>
-#include <limits.h>
 
-#include "rtmp_sys.h"
 #include "log.h"
+#include "rtmp_sys.h"
 
 #ifdef CRYPTO
 #ifdef USE_POLARSSL
@@ -250,8 +250,12 @@ RTMP_TLS_Init()
   SSL_library_init();
   OpenSSL_add_all_digests();
   RTMP_TLS_ctx = SSL_CTX_new(SSLv23_method());
+    if (!RTMP_TLS_ctx)
+    {
+        RTMP_LogPrintf("init rtmp_tls_ctx error");
+    }
   SSL_CTX_set_options(RTMP_TLS_ctx, SSL_OP_ALL);
-  SSL_CTX_set_default_verify_paths(RTMP_TLS_ctx);
+    SSL_CTX_set_default_verify_paths(RTMP_TLS_ctx);
 #endif
 #endif
 }

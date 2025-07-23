@@ -725,7 +725,8 @@ int
 main(int argc, char **argv)
 {
   extern char *optarg;
-
+	extern int optind;
+	optind = 0;
   int nStatus = RD_SUCCESS;
   double percent = 0;
   double duration = 0.0;

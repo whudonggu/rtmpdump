@@ -1,0 +1,24 @@
+#构建opessl的可调试版本
+#到指定目录
+# librtmp目录下clone openssl库。也可以通过其他方式下载编译好的openssl。
+# 自己编译可以利用库脚本批量迁移头文件到指定目录
+git clone https://github.com/openssl/openssl.git
+
+./Configure darwin64-arm64-cc --debug --prefix=/usr/local/openssl
+make -j$(sysctl -n hw.ncpu) #-j开启多核编译
+sudo make install #sudo避免文件夹访问权限问题导致拷贝库到指定目录失败
+
+#修改原本的makefile文件，指定openssl头文件路径
+CFLAGS=-I/usr/local/openssl/include
+#修改原本的makefile文件，指定openssl库文件路径
+CFLAGS=-L/usr/local/openssl/lib
+
+#debug模式下完整编译不裁剪符号
+CFLAGS+=-g -O0
+
+# 编译过程中遇到的报错
+1. 执行make命令时需要指定平台 即SYS=darwin
+2. 之前拷贝libssl.a到/usr/local/。手动拷贝没有脚本执行的可靠。
+3. SSL_CTX_set_options(RTMP_TLS_ctx, SSL_OP_ALL);执行失败。因为2
+这里是手动拷贝的。导致生成的可执行文件没有链接到正确的库文件
+4. 使用Clion IDE，没有必要听chatgpt的，将工程转换为cmake工程属实没有必要

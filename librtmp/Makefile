@@ -53,11 +53,11 @@ SODIR_darwin=$(LIBDIR)
 SODIR_mingw=$(BINDIR)
 SODIR=$(SODIR_$(SYS))
 
-SO_LDFLAGS_posix=-shared -Wl,-soname,$@
+SO_LDFLAGS_posix=-shared -Wl,$@
 SO_LDFLAGS_darwin=-dynamiclib -twolevel_namespace -undefined dynamic_lookup \
 	-fno-common -headerpad_max_install_names -install_name $(libdir)/$@
 SO_LDFLAGS_mingw=-shared -Wl,--out-implib,librtmp.dll.a
-SO_LDFLAGS=$(SO_LDFLAGS_$(SYS))
+SO_LDFLAGS=$(SO_LDFLAGS_$(SYS)) -O0
 
 INSTALL_IMPLIB_posix=
 INSTALL_IMPLIB_darwin=
@@ -74,8 +74,10 @@ SO_INST=$(SOINST_$(SHARED))
 
 DEF=-DRTMPDUMP_VERSION=\"$(VERSION)\" $(CRYPTO_DEF) $(XDEF)
 OPT=-O2
-CFLAGS=-Wall $(XCFLAGS) $(INC) $(DEF) $(OPT) $(SO_DEF)
+CFLAGS=-g -O0 -Wall $(XCFLAGS) $(INC) $(DEF) $(OPT) $(SO_DEF)
 LDFLAGS=$(XLDFLAGS)
+CFLAGS += -I/usr/local/openssl/include
+LDFLAGS += -L/usr/local/openssl/lib
 
 
 OBJS=rtmp.o log.o amf.o hashswf.o parseurl.o

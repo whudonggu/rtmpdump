@@ -5,8 +5,9 @@ prefix=/usr/local
 CC=$(CROSS_COMPILE)gcc
 LD=$(CROSS_COMPILE)ld
 
-SYS=posix
+#SYS=posix
 #SYS=mingw
+SYS=darwin
 
 CRYPTO=OPENSSL
 #CRYPTO=POLARSSL
@@ -21,8 +22,10 @@ CRYPTO_DEF=$(DEF_$(CRYPTO))
 
 DEF=-DRTMPDUMP_VERSION=\"$(VERSION)\" $(CRYPTO_DEF) $(XDEF)
 OPT=-O2
-CFLAGS=-Wall $(XCFLAGS) $(INC) $(DEF) $(OPT)
-LDFLAGS=-Wall $(XLDFLAGS)
+CFLAGS=-g -O0 -Wall $(XCFLAGS) $(INC) $(DEF) $(OPT)
+LDFLAGS=-g -Wall $(XLDFLAGS)
+#LDFLAGS += -L/Users/bigo/Demo/rtmpdump/librtmp/openssl
+LDFLAGS += -L/usr/local/openssl/lib
 
 bindir=$(prefix)/bin
 sbindir=$(prefix)/sbin
