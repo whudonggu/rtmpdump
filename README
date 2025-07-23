@@ -7,6 +7,12 @@ License: GPLv2
 librtmp license: LGPLv2.1
 http://rtmpdump.mplayerhq.hu/
 
+Please read the compile_helper.text first
+
+To Build
+
+Run init_openssl.sh first
+
 To compile type "make" with SYS=<platform name>, e.g.
 
   $ make SYS=posix
